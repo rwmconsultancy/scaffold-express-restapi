@@ -61,11 +61,19 @@ const loginUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       token: generateToken(user._id),
+      message: `Successfully logged on. Welcome ${user.name}!`,
     });
   } else {
-    res.status(400);
-    throw new Error("Invalid credentials");
+    res.status(400).json({ message: "Whoops! Invalid credentials" });
+    // throw new Error("Whoops! Invalid credentials");
   }
+});
+
+// @desc    Get user data
+// @route   GET /api/users/me
+// @access  Private
+const getMe = asyncHandler(async (req, res) => {
+  res.status(200).json(req.user);
 });
 
 // Generate JWT
@@ -77,5 +85,6 @@ const generateToken = (id) => {
 
 module.exports = {
   registerUser,
-  loginUser
+  loginUser,
+  getMe
 };
